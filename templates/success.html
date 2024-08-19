@@ -21,6 +21,8 @@
             <p>source language = {{translator.src_lang}}</p>
             <p>destination language = {{translator.dst_lang}}</p>
             <p>pdf name = {{translator.pdf_name}}</p>
+            <a href="/media/markdowns/{{translator.pdf}}_{{translator.src_lang}}_to_{{translator.dst_lang}}.md downlaod">downlaod link </a>
+            <a href="{% url 'download_file' 'markdowns/10_Things_Learn_about_Learning_english_to_korean.md' %}">Download sample.md</a>
         {% endfor %}
         
         
