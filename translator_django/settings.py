@@ -131,3 +131,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 유저가 업로드할 미디어 위치
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+PDFS_ROOT = MEDIA_ROOT / "pdfs"

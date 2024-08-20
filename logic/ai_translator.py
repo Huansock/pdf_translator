@@ -1,5 +1,4 @@
 from pdf2image import convert_from_path
-from openai import OpenAI
 import base64
 import re
 import os
@@ -24,7 +23,6 @@ class ai_translator:
         dst_lang: str = None,
         api_key: str = "",
     ):
-        client = OpenAI()
         print(f"type of pdf_name = {type(pdf_name)}")
         print(pdf_name)
         name2store = f"{pdf_name}_{src_lang}_to_{dst_lang}"
@@ -43,43 +41,6 @@ class ai_translator:
         open(md_path, "w")
         while i < len(images):
             current_image_path = output_path_base.format(pdf_name=pdf_name, index=i + 1)
-            messages = [
-                {
-                    "role": "system",
-                    "content": "You are a helpful, professional image translator.",
-                },
-                {
-                    "role": "system",
-                    "name": "example_user",
-                    "content": "You are a helpful, image translator from source english to korean. response type is raw markdown. organize the output and remove redundanz.translate it in korean",
-                },
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": f"You are a helpful, image translator from source {src_lang} to {dst_lang}. response type is raw markdown. organize the output and remove redundanz. write running header small.Emphasize the title of the paragraph.",
-                        },
-                    ],
-                },
-            ]
-
-            messages[2]["content"].append(
-                {
-                    "type": "image_url",
-                    "image_url": {
-                        "url": f"data:image/jpeg;base64,{cls._encode_image(current_image_path)}"
-                    },
-                }
-            )
-
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=messages,
-                n=1,
-                max_tokens=16383,
-                temperature=0,
-            )
             headers = {
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {api_key}",
@@ -124,10 +85,12 @@ class ai_translator:
                 "https://api.openai.com/v1/chat/completions",
                 headers=headers,
                 json=payload,
-            )
+            ).json()
+            
+            print(response)
 
             # remove ```markdown ``` part
-            result = response.choices[0].message.content
+            result = response["choices"][0]["message"]["content"]
             result = re.sub(r"^```markdown", "", result, count=1)
             result = re.sub(r"```(?![\s\S]*```)", "", result)
 
