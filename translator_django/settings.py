@@ -77,12 +77,9 @@ WSGI_APPLICATION = 'translator_django.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'translator',
-		'USER': 'translator',
-		'PASSWORD' : 'pdf-translator',
-		'HOST': 'localhost',
-		'PORT':'5432'
+		
     }
 }
 
